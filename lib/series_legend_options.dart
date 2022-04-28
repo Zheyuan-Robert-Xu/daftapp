@@ -121,15 +121,18 @@ class CustomLegendBuilder extends charts.LegendContentBuilder {
         charts.ColorUtil.toDartColor(legendEntry.color) ?? Colors.blue;
 
     return GestureDetector(
-        child: Container(
-            height: 30,
-            width: 90,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: isHidden ? (color).withOpacity(0.26) : color,
-            ),
-            child: Center(child: Text(legendEntry.label, style: style))),
-        onTapUp: makeTapUpCallback(context, legendEntry, legend));
+      child: Container(
+          height: 30,
+          width: 90,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: isHidden ? (color).withOpacity(0.26) : color,
+          ),
+          child: Center(child: Text(legendEntry.label, style: style))),
+      onTapUp: makeTapUpCallback(context, legendEntry, legend),
+      // onDoubleTap: () => makeTapUpCallback(context, legendEntry, legend),
+      onLongPress: longPressCallback(context, legendEntry, legend),
+    );
   }
 
   GestureTapUpCallback makeTapUpCallback(BuildContext context,
@@ -143,6 +146,29 @@ class CustomLegendBuilder extends charts.LegendContentBuilder {
             legend.showSeries(seriesId);
           } else {
             legend.hideSeries(seriesId);
+          }
+          legend.chart.redraw(skipLayout: true, skipAnimation: false);
+          break;
+        case common.LegendTapHandling.none:
+        default:
+          break;
+      }
+    };
+  }
+
+  GestureLongPressCallback longPressCallback(BuildContext context,
+      common.LegendEntry legendEntry, common.SeriesLegend legend) {
+    return () {
+      switch (legend.legendTapHandling) {
+        case common.LegendTapHandling.hide:
+          final seriesId = legendEntry.series.id;
+
+          if (legend.isSeriesHidden(seriesId)) {
+            // This will not be recomended since it suposed to be accessible only from inside the legend class, but it worked fine on my code.
+
+            legend.showSeries(seriesId);
+          } else {
+            legend.onlyKeepSeries(seriesId);
           }
           legend.chart.redraw(skipLayout: true, skipAnimation: false);
           break;

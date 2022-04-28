@@ -1,22 +1,37 @@
-import 'package:daftapp/display/page/AnimationScreen.dart';
-import 'package:daftapp/display/page/ChartsScreen.dart';
 import 'package:flutter/material.dart';
 
+import 'series_legend_options.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-  // This widget is the root of your application.
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(),
-      // home: const AnimationScreen(),
-      home: const ChartsScreen(),
+      debugShowCheckedModeBanner: false,
+      home: HomeWidget(),
+    );
+  }
+}
+
+class HomeWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          margin: const EdgeInsets.all(20),
+          height: 300,
+          child: LegendOptions.withSampleData(),
+        ),
+      ),
     );
   }
 }

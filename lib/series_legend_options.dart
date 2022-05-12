@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:charts_common/common.dart' as common;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -30,21 +31,22 @@ class LegendOptions extends StatelessWidget {
       barGroupingType: charts.BarGroupingType.grouped,
       defaultRenderer: charts.BarRendererConfig(
           cornerStrategy: const charts.ConstCornerStrategy(50)),
-      primaryMeasureAxis: charts.NumericAxisSpec(
+      primaryMeasureAxis: const charts.NumericAxisSpec(
         tickProviderSpec: charts.BasicNumericTickProviderSpec(
           desiredMinTickCount: 6,
           desiredMaxTickCount: 10,
         ),
       ),
-      secondaryMeasureAxis: charts.NumericAxisSpec(
+      secondaryMeasureAxis: const charts.NumericAxisSpec(
           tickProviderSpec: charts.BasicNumericTickProviderSpec(
               desiredTickCount: 6, desiredMaxTickCount: 10)),
       selectionModels: [
         charts.SelectionModelConfig(
             changedListener: (charts.SelectionModel model) {
-          if (model.hasDatumSelection)
+          if (model.hasDatumSelection) if (kDebugMode) {
             print(model.selectedSeries[0]
                 .measureFn(model.selectedDatum[0].index));
+          }
         })
       ],
       behaviors: [
@@ -76,6 +78,15 @@ class LegendOptions extends StatelessWidget {
       OrdinalSales('2/19', 70),
     ];
 
+    final phoneSalesData = [
+      OrdinalSales('2/14', 39),
+      OrdinalSales('2/15', 15),
+      OrdinalSales('2/16', 80),
+      OrdinalSales('2/17', 35),
+      OrdinalSales('2/18', 40),
+      OrdinalSales('2/19', 60),
+    ];
+
     return [
       charts.Series<OrdinalSales, String>(
           id: 'expense',
@@ -86,6 +97,15 @@ class LegendOptions extends StatelessWidget {
           labelAccessorFn: (OrdinalSales sales, _) =>
               'expense: ${sales.sales.toString()}',
           displayName: "Expense"),
+      charts.Series<OrdinalSales, String>(
+          id: 'try',
+          domainFn: (OrdinalSales sales, _) => sales.year,
+          measureFn: (OrdinalSales sales, _) => sales.sales,
+          data: phoneSalesData,
+          colorFn: (_, __) => charts.ColorUtil.fromDartColor(Colors.green),
+          labelAccessorFn: (OrdinalSales sales, _) =>
+              'try: ${sales.sales.toString()}',
+          displayName: "try"),
       charts.Series<OrdinalSales, String>(
         id: 'income',
         domainFn: (OrdinalSales sales, _) => sales.year,

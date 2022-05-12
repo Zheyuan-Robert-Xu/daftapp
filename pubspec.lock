@@ -39,16 +39,20 @@ packages:
   charts_common:
     dependency: "direct main"
     description:
-      name: charts_common
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: charts_common
+      ref: longpress
+      resolved-ref: "67e0fb4ac76e1f864232c8f6df97e64249f59ce8"
+      url: "https://github.com/Zheyuan-Robert-Xu/charts.git"
+    source: git
     version: "0.12.0"
   charts_flutter:
     dependency: "direct main"
     description:
-      name: charts_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: charts_flutter
+      ref: longpress
+      resolved-ref: "67e0fb4ac76e1f864232c8f6df97e64249f59ce8"
+      url: "https://github.com/Zheyuan-Robert-Xu/charts.git"
+    source: git
     version: "0.12.0"
   clock:
     dependency: transitive

@@ -151,7 +151,9 @@ class CustomLegendBuilder extends charts.LegendContentBuilder {
           child: Center(child: Text(legendEntry.label, style: style))),
       onTapUp: makeTapUpCallback(context, legendEntry, legend),
       // onDoubleTap: () => makeTapUpCallback(context, legendEntry, legend),
+      // Long Press and double tap have same effect
       onLongPress: longPressCallback(context, legendEntry, legend),
+      onDoubleTap: longPressCallback(context, legendEntry, legend),
     );
   }
 

@@ -8,7 +8,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 const Color blueColor = Color(0xff1565C0);
 const Color orangeColor = Color(0xffFFA000);
 
-class LegendOptions extends StatelessWidget {
+class LegendOptions extends StatefulWidget {
   final List<charts.Series> seriesList;
   static const secondaryMeasureAxisId = 'secondaryMeasureAxisId';
   final bool animate;
@@ -24,40 +24,7 @@ class LegendOptions extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return charts.BarChart(
-      seriesList,
-      animate: animate,
-      barGroupingType: charts.BarGroupingType.grouped,
-      defaultRenderer: charts.BarRendererConfig(
-          cornerStrategy: const charts.ConstCornerStrategy(50)),
-      primaryMeasureAxis: const charts.NumericAxisSpec(
-        tickProviderSpec: charts.BasicNumericTickProviderSpec(
-          desiredMinTickCount: 6,
-          desiredMaxTickCount: 10,
-        ),
-      ),
-      secondaryMeasureAxis: const charts.NumericAxisSpec(
-          tickProviderSpec: charts.BasicNumericTickProviderSpec(
-              desiredTickCount: 6, desiredMaxTickCount: 10)),
-      selectionModels: [
-        charts.SelectionModelConfig(
-            changedListener: (charts.SelectionModel model) {
-          if (model.hasDatumSelection) if (kDebugMode) {
-            print(model.selectedSeries[0]
-                .measureFn(model.selectedDatum[0].index));
-          }
-        })
-      ],
-      behaviors: [
-        charts.SeriesLegend.customLayout(
-          CustomLegendBuilder(),
-          position: charts.BehaviorPosition.top,
-          outsideJustification: charts.OutsideJustification.start,
-        ),
-      ],
-    );
-  }
+  State<LegendOptions> createState() => _LegendOptionsState();
 
   static List<charts.Series<OrdinalSales, String>> _createSampleData() {
     final desktopSalesData = [
@@ -115,6 +82,44 @@ class LegendOptions extends StatelessWidget {
         displayName: "Income",
       )..setAttribute(charts.measureAxisIdKey, secondaryMeasureAxisId),
     ];
+  }
+}
+
+class _LegendOptionsState extends State<LegendOptions> {
+  @override
+  Widget build(BuildContext context) {
+    return charts.BarChart(
+      widget.seriesList,
+      animate: widget.animate,
+      barGroupingType: charts.BarGroupingType.grouped,
+      defaultRenderer: charts.BarRendererConfig(
+          cornerStrategy: const charts.ConstCornerStrategy(50)),
+      primaryMeasureAxis: const charts.NumericAxisSpec(
+        tickProviderSpec: charts.BasicNumericTickProviderSpec(
+          desiredMinTickCount: 6,
+          desiredMaxTickCount: 10,
+        ),
+      ),
+      secondaryMeasureAxis: const charts.NumericAxisSpec(
+          tickProviderSpec: charts.BasicNumericTickProviderSpec(
+              desiredTickCount: 6, desiredMaxTickCount: 10)),
+      selectionModels: [
+        charts.SelectionModelConfig(
+            changedListener: (charts.SelectionModel model) {
+          if (model.hasDatumSelection) if (kDebugMode) {
+            print(model.selectedSeries[0]
+                .measureFn(model.selectedDatum[0].index));
+          }
+        })
+      ],
+      behaviors: [
+        charts.SeriesLegend.customLayout(
+          CustomLegendBuilder(),
+          position: charts.BehaviorPosition.top,
+          outsideJustification: charts.OutsideJustification.start,
+        ),
+      ],
+    );
   }
 }
 
